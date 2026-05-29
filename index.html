@@ -2,25 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Diabetes Risk AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Risk AI | Pro Assessment</title>
     <style>
-        :root { --accent: #38bdf8; }
-        body { background: #0f172a; color: white; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(20px); padding: 2rem; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 450px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        :root {
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+        }
+        body { 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Inter', system-ui, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        h1 { 
+            font-size: 1.75rem; 
+            margin-bottom: 0.5rem; 
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
-        input { background: rgba(0,0,0,0.2); border: 1px solid #334155; padding: 12px; border-radius: 12px; color: white; width: 100%; box-sizing: border-box; transition: 0.3s; }
-        input:focus { border-color: var(--accent); outline: none; }
-        button { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(90deg, #38bdf8, #818cf8); color: white; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        button:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.3); }
-        #output { margin-top: 20px; padding: 15px; border-radius: 16px; display: none; text-align: center; }
+        input { 
+            background: rgba(0,0,0,0.2); 
+            border: 1px solid #334155; 
+            padding: 12px; 
+            border-radius: 12px; 
+            color: white; 
+            width: 100%; 
+            box-sizing: border-box;
+        }
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            border-radius: 12px; 
+            border: none; 
+            background: linear-gradient(90deg, var(--primary), var(--secondary)); 
+            color: white; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        button:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+        #output { margin-top: 25px; padding: 20px; border-radius: 16px; display: none; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
 
-<div class="card">
+<div class="container">
     <h1>Diabetes Risk AI</h1>
-    <p style="font-size: 0.9rem; opacity: 0.7;">Enter metrics for clinical analysis</p>
+    <p style="opacity: 0.7; margin-bottom: 20px;">Enter clinical metrics to assess health risk.</p>
+    
     <div class="grid">
         <input type="number" id="preg" placeholder="Pregnancies">
         <input type="number" id="glucose" placeholder="Glucose">
@@ -29,23 +77,36 @@
         <input type="number" id="age" placeholder="Age">
         <input type="number" id="dpf" placeholder="Pedigree" step="0.01">
     </div>
-    <button onclick="analyze()">Analyze Health Profile</button>
+    
+    <button onclick="runAnalysis()">Analyze Health Profile</button>
+    
     <div id="output"></div>
 </div>
 
 <script>
-    function analyze() {
-        const glucose = document.getElementById('glucose').value;
-        const bmi = document.getElementById('bmi').value;
-        const out = document.getElementById('output');
+    function runAnalysis() {
+        const glucose = parseFloat(document.getElementById('glucose').value);
+        const bmi = parseFloat(document.getElementById('bmi').value);
+        const output = document.getElementById('output');
         
-        // This is your "model" logic simplified for the browser
-        const isHighRisk = (glucose > 130 || bmi > 30);
+        if (isNaN(glucose) || isNaN(bmi)) {
+            alert("Please enter valid Glucose and BMI values.");
+            return;
+        }
+
+        // Logic mimic for front-end demonstration
+        const highRisk = (glucose > 130 || bmi > 30);
         
-        out.style.display = 'block';
-        out.style.background = isHighRisk ? 'rgba(244, 63, 94, 0.2)' : 'rgba(34, 197, 94, 0.2)';
-        out.innerHTML = `<h3>${isHighRisk ? '⚠️ High Risk' : '✅ Low Risk'}</h3>
-                         <p style="font-size: 0.85rem">${isHighRisk ? 'Please consult a healthcare professional.' : 'Your metrics appear within a healthy range.'}</p>`;
+        output.style.display = 'block';
+        output.style.background = highRisk ? 'rgba(244, 63, 94, 0.15)' : 'rgba(34, 197, 94, 0.15)';
+        output.innerHTML = `
+            <h3 style="margin:0; color: ${highRisk ? '#fb7185' : '#4ade80'}">
+                ${highRisk ? '⚠️ High Risk Detected' : '✅ Low Risk Detected'}
+            </h3>
+            <p style="font-size: 0.9rem; margin-top: 10px;">
+                ${highRisk ? 'Your profile indicators suggest a need for professional medical consultation.' : 'Your indicators appear to be within a healthy range.'}
+            </p>
+        `;
     }
 </script>
 </body>
