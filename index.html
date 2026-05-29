@@ -3,84 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pima Diabetes Risk Hub</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Diabetes Risk Assessment</title>
+    <style>
+        /* CSS combined here */
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            font-family: 'Inter', sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+        }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .glow-button {
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s;
+        }
+        .glow-button:hover { transform: scale(1.02); }
+    </style>
 </head>
 <body>
-    <div class="site-shell">
-        <div class="background-glow"></div>
-        <header class="site-header">
-            <div>
-                <p class="label-pill">Pima Diabetes Risk</p>
-                <h1>Simple health inputs. Clear diabetes risk.</h1>
-                <p class="subtitle">Only the most important values are needed to get a fast prediction. The interface is designed for anyone to use.</p>
-            </div>
-            <div class="header-card">
-                <span>Designed for easy assessment</span>
-                <div class="header-badges">
-                    <span>Minimal fields</span>
-                    <span>Friendly labels</span>
-                    <span>Instant output</span>
-                </div>
-            </div>
+
+    <div class="glass-card">
+        <header>
+            <h1>Diabetes Risk AI</h1>
+            <p>Predictive health assessment</p>
         </header>
+        
+        <form id="prediction-form">
+            <div class="input-grid">
+                <input type="number" id="preg" placeholder="Pregnancies" required>
+                <input type="number" id="glucose" placeholder="Glucose" required>
+                <input type="number" id="bp" placeholder="BP" required>
+                <input type="number" id="bmi" placeholder="BMI" required>
+            </div>
+            <button type="submit" class="glow-button">Run Analysis</button>
+        </form>
 
-        <main class="layout-grid">
-            <section class="panel panel-left">
-                <div class="panel-title">
-                    <h2>Enter your values</h2>
-                    <p>Just fill the six fields below. The model automatically fills the less-important values with typical averages.</p>
-                </div>
-                <form id="predict-form" class="form-grid">
-                    {% for key, label, unit in features %}
-                    <label class="field-card" for="{{ key }}">
-                        <span class="field-title">{{ label }}</span>
-                        <input id="{{ key }}" name="{{ key }}" type="number" step="any" placeholder="{{ hints[key] }}" required>
-                        <span class="field-unit">{{ unit }}</span>
-                        <small>{{ info[key] }}</small>
-                    </label>
-                    {% endfor %}
-                    <button type="submit" class="action-button">Check Risk</button>
-                </form>
-            </section>
-
-            <section class="panel panel-right">
-                <div class="result-block">
-                    <div class="result-top">
-                        <div>
-                            <span class="label-pill secondary">Health Score</span>
-                            <h2>Prediction summary</h2>
-                        </div>
-                        <div id="result-pill" class="result-pill">Ready</div>
-                    </div>
-                    <div class="result-grid">
-                        <div class="result-card">
-                            <strong id="prediction-text">Submit your data</strong>
-                            <p>Outcome from the model based on your inputs.</p>
-                        </div>
-                        <div class="result-card">
-                            <strong id="confidence-value">--%</strong>
-                            <p>Confidence level for the prediction.</p>
-                        </div>
-                    </div>
-                    <div class="meter-shell">
-                        <div class="meter-track"><div class="meter-fill" id="meter-fill"></div></div>
-                        <div class="meter-labels"><span>Low</span><span>High</span></div>
-                    </div>
-                    <div class="advice-box">
-                        <p id="advice-text">Enter your values and click the button to see your risk and clear guidance.</p>
-                    </div>
-                </div>
-                <div class="detail-block">
-                    <h3>Captured values</h3>
-                    <ul id="value-list" class="detail-list"></ul>
-                </div>
-            </section>
-        </main>
+        <div id="result" style="margin-top: 20px; text-align: center;">
+            <p id="prediction-output">Enter data to see results</p>
+        </div>
     </div>
-    <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+    <script>
+        // JavaScript combined here
+        document.getElementById('prediction-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const glucose = document.getElementById('glucose').value;
+            const output = document.getElementById('prediction-output');
+            
+            // Placeholder logic: Since GitHub Pages is static, 
+            // you cannot run the Python code here directly.
+            if(glucose > 140) {
+                output.innerHTML = "<strong>Result:</strong> High Risk Detected.";
+            } else {
+                output.innerHTML = "<strong>Result:</strong> Low Risk Detected.";
+            }
+        });
+    </script>
 </body>
 </html>
