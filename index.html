@@ -3,60 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diabetes Risk Assessment</title>
+    <title>Diabetes Risk AI</title>
     <style>
-        /* CSS combined here */
-        body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            font-family: 'Inter', sans-serif;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 400px;
-        }
-        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        input {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 12px;
-            border-radius: 8px;
-            color: white;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .glow-button {
-            background: linear-gradient(90deg, #38bdf8, #818cf8);
-            border: none;
-            padding: 15px;
-            width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            color: white;
-            transition: transform 0.2s;
-        }
-        .glow-button:hover { transform: scale(1.02); }
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); font-family: 'Inter', sans-serif; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); width: 90%; max-width: 500px; }
+        h1 { margin-top: 0; font-size: 1.8rem; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        input { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; color: white; width: 100%; box-sizing: border-box; }
+        input:focus { outline: none; border-color: #38bdf8; }
+        .glow-button { background: linear-gradient(90deg, #38bdf8, #818cf8); border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; color: white; transition: 0.3s; }
+        .glow-button:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+        #result { margin-top: 25px; padding: 15px; border-radius: 15px; background: rgba(0,0,0,0.2); display: none; }
     </style>
 </head>
 <body>
 
     <div class="glass-card">
-        <header>
-            <h1>Diabetes Risk AI</h1>
-            <p>Predictive health assessment</p>
-        </header>
+        <h1>Diabetes Risk AI</h1>
+        <p>Enter your clinical data below for an instant risk assessment.</p>
         
         <form id="prediction-form">
             <div class="input-grid">
@@ -64,28 +28,37 @@
                 <input type="number" id="glucose" placeholder="Glucose" required>
                 <input type="number" id="bp" placeholder="BP" required>
                 <input type="number" id="bmi" placeholder="BMI" required>
+                <input type="number" id="age" placeholder="Age" required>
+                <input type="number" id="dpf" placeholder="Pedigree Func" step="0.01" required>
             </div>
-            <button type="submit" class="glow-button">Run Analysis</button>
+            <button type="submit" class="glow-button">Analyze Health Profile</button>
         </form>
 
-        <div id="result" style="margin-top: 20px; text-align: center;">
-            <p id="prediction-output">Enter data to see results</p>
+        <div id="result">
+            <h3 id="risk-status"></h3>
+            <p id="risk-advice"></p>
         </div>
     </div>
 
     <script>
-        // JavaScript combined here
         document.getElementById('prediction-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const glucose = document.getElementById('glucose').value;
-            const output = document.getElementById('prediction-output');
-            
-            // Placeholder logic: Since GitHub Pages is static, 
-            // you cannot run the Python code here directly.
-            if(glucose > 140) {
-                output.innerHTML = "<strong>Result:</strong> High Risk Detected.";
+            // Simple heuristic logic for the front-end demo
+            const glucose = parseFloat(document.getElementById('glucose').value);
+            const bmi = parseFloat(document.getElementById('bmi').value);
+            const resultDiv = document.getElementById('result');
+            const status = document.getElementById('risk-status');
+            const advice = document.getElementById('risk-advice');
+
+            resultDiv.style.display = 'block';
+            if(glucose > 130 || bmi > 30) {
+                status.innerText = "High Risk Detected";
+                status.style.color = "#fb7185";
+                advice.innerText = "Your indicators suggest a higher risk profile. Please consult with a healthcare professional.";
             } else {
-                output.innerHTML = "<strong>Result:</strong> Low Risk Detected.";
+                status.innerText = "Low Risk Detected";
+                status.style.color = "#4ade80";
+                advice.innerText = "Your indicators are within a normal range. Maintain a healthy lifestyle.";
             }
         });
     </script>
